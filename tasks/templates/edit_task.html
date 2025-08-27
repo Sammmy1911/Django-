@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Editar Tarea</title>
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Editar Tarea</h2>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="POST" action="{% url 'edit-task' task.id %}">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="task-status" class="form-label">Estado</label>
+                        <select class="form-select" id="task-status" name="task-status">
+                            {% for status in task_statuses %}
+                                <option value="{{ status.id }}" {% if status.id == task.status_id.id %}selected{% endif %}>{{ status.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="task-name" class="form-label">Nombre de la Tarea</label>
+                        <input type="text" class="form-control" id="task-name" name="task-name" value="{{ task.name }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="task-description" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="task-description" name="task-description" rows="3">{{ task.description }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="task-deadline" class="form-label">Fecha Límite</label>
+                        <input type="date" class="form-control" id="task-deadline" name="task-deadline" value="{{ task.deadline|date:'Y-m-d' }}">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    <a href="{% url 'list-tasks' %}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+{% endblock content %}
